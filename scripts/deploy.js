@@ -33,7 +33,7 @@ export const nftAdress = '${nft.address}'
 `
 
 let data = JSON.stringify(config)
-fs.writeFileSync('./front_end/config.js', JSON.parse(data))
+fs.writeFileSync('./my-cool-project/config.js', JSON.parse(data))
 }
 
 // We recommend this pattern to be able to use async/await everywhere
