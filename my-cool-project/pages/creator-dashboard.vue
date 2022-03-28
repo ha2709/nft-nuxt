@@ -34,7 +34,7 @@ import axios from 'axios';
 import Web3Modal from 'web3modal'
 
 export default {
-  name: 'MyAssetPage',
+  name: 'CreatorDashBoardPage',
   data () {
     return {
       currentAccount: null,

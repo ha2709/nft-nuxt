@@ -150,7 +150,6 @@ contract NFTMarket is ReentrancyGuard {
             uint itemCount = 0;
             uint currentIndex = 0;
 
-
             for(uint i = 0; i < totalItemCount; i++){
                 //get only the items that this user has bought/is the owner
                 if(idMarketItem[i+1].owner == msg.sender){
