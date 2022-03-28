@@ -1,8 +1,8 @@
 # nft-nuxt
-This project is marketplace with Nuxt front end
+This project is marketplace with NuxtJS for front end
 
 
-installation for Hardhat 
+Installation for Hardhat 
 https://hardhat.org/tutorial/setting-up-the-environment.html
 
 In terminal run : 
@@ -22,11 +22,18 @@ Open other terminal run
 
 `npm install`
 
+`npm install --save web3modal`
+
 `npm run dev`
+
+Installation for `Metamask` https://www.youtube.com/watch?v=OJqaZRpRqXM
 
 In `MetaMask`, change to Hardhat local network
 
-add these private key `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
+https://www.youtube.com/watch?v=OJqaZRpRqXM
+
+
+Add these private key `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
 
 to the `Import Account` choose `Private key`
 

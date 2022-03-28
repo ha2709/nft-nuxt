@@ -16,7 +16,7 @@
         Dashboard
       </NuxtLink >
     </nav>
-    <button id="connect" class='primaryButton' @click='connectWallet'>Connect Wallet</button>
+    <!-- <button id="connect" class='primaryButton' @click='connectWallet'>Connect Wallet</button> -->
     <div>
       <h1>Welcome to Home!</h1>
     </div>
@@ -24,9 +24,9 @@
       <div class="px-4" style="max-width: 1600px">
         <div v-for="(nft, i) in nfts" :key="i" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
           <div :key="i" class="border shadow-transparent rounded-xl overflow-hidden">
-            <img :src="`${nft.image}`" alt="Pic of the author" />
+            <img :src="`${nft.image}`" width="500" height="500" alt="Pic of the author" />
             <div class="p-4">
-              <p class="text-2xl font-semibold">
+              <p class="text-2xl font-semibold" style="height: '64px'">
                 {{nft.name}}
               </p>
               <div style="height:70px, overflow:hidden">
@@ -35,7 +35,7 @@
             </div>
             <div class="p-4 bg-black">
               <p class="text-2xl mb-4 font-bold text-white">{{nft.price}} ETH</p>
-              <button class="w-full text-white font-bold rounded"
+              <button class="w-full bg-pink-500 text-white font-bold py-2 px-12 rounded"
                     onclick="() =>{buyNFT(nft)}"
               >Buy NFT</button>
             </div>
@@ -62,7 +62,6 @@ export default {
       currentAccount: null,
       contractAddress: 'set this to your contract address, if ss)',
       nfts: []
-
     }
   },
   async fetch () {
@@ -111,29 +110,37 @@ export default {
       await transaction.wait()
       this.loadNFTs()
     },
-    async connectWallet () {
-      // loadNFTs()
-      try {
-        const { ethereum } = window
+    // async connectWallet () {
+    //   // loadNFTs()
+    //   try {
+    //     if (typeof window !== 'undefined') {
+    //       console.log('You are on the browser')
+    //       // ✅ Can use window here
+    //     } else {
+    //       console.log('You are on the server')
+    //       // ⛔️ Don't use window here
+    //     }
 
-        if (!ethereum) {
-          alert('Get MetaMask!')
-          return
-        }
+    //     const { ethereum } = window
 
-        const accounts = await ethereum.request({
-          method: 'eth_requestAccounts'
-        })
+    //     if (!ethereum) {
+    //       alert('Get MetaMask!')
+    //       return
+    //     }
 
-        // eslint-disable-next-line no-console
-        console.log('Connected', accounts[0])
-        document.getElementById('connect').innerHTML = accounts[0]
-        this.currentAccount = accounts[0]
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error)
-      }
-    }
+    //     const accounts = await ethereum.request({
+    //       method: 'eth_requestAccounts'
+    //     })
+
+    //     // eslint-disable-next-line no-console
+    //     console.log('Connected', accounts[0])
+    //     document.getElementById('connect').innerHTML = accounts[0]
+    //     this.currentAccount = accounts[0]
+    //   } catch (error) {
+    //     // eslint-disable-next-line no-console
+    //     console.log(error)
+    //   }
+    // }
   }
 }
 </script>

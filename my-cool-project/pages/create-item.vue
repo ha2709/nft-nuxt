@@ -34,7 +34,7 @@
 
       <button
          @click="createItem"
-        class="font-bold mt-4 bg-pink-50"
+        class="font-bold mt-4 bg-pink-200 text-black rounded p-4 shadow-lg"
       >Create NFT</button>
       <div>
         <img v-if="this.fileUrl"
@@ -52,7 +52,7 @@
 
 <script>
 import { create as ipfsHttpClient } from 'ipfs-http-client'
-
+import '@/assets/css/main.css'
 import { nftAdress, nftMarketAddress } from '../config'
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
 import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
