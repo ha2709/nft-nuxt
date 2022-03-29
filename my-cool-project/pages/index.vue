@@ -15,16 +15,17 @@
       <NuxtLink  class="link" to="/creator-dashboard">
         Dashboard
       </NuxtLink >
+       <button id="connect" class='primaryButton' @click='connectWallet'>Connect Wallet</button>
     </nav>
-    <!-- <button id="connect" class='primaryButton' @click='connectWallet'>Connect Wallet</button> -->
+   
     <div>
       <h1>Welcome to Home!</h1>
     </div>
-    <div class="flex justify-center">
-      <div class="px-4" style="max-width: 1600px">
-        <div v-for="(nft, i) in nfts" :key="i" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
-          <div :key="i" class="border shadow-transparent rounded-xl overflow-hidden">
-            <img :src="`${nft.image}`" width="500" height="500" alt="Pic of the author" />
+    <div class="container movies">
+      <div class="movies-grid" style="max-width: 1600px">
+        <div v-for="(nft, i) in nfts" :key="i" class="movie">
+          <div :key="i" class="movie-img">
+            <img :src="`${nft.image}`" width="200px" height="200px" alt="Pic of the author" />
             <div class="p-4">
               <p class="text-2xl font-semibold" style="height: '64px'">
                 {{nft.name}}
@@ -36,7 +37,7 @@
             <div class="p-4 bg-black">
               <p class="text-2xl mb-4 font-bold text-white">{{nft.price}} ETH</p>
               <button class="w-full bg-pink-500 text-white font-bold py-2 px-12 rounded"
-                    onclick="() =>{buyNFT(nft)}"
+                     @click="buyNFT(nft, i)"
               >Buy NFT</button>
             </div>
           </div>
@@ -54,6 +55,8 @@ import Web3Modal from 'web3modal'
 import { nftAdress, nftMarketAddress } from '../config'
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
 import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
+var  provider, tokenContract, marketContract
+
 export default {
   name: 'IndexPage',
 
@@ -69,18 +72,19 @@ export default {
   },
   methods: {
     async loadNFTs () {
-      const provider = await new ethers.providers.JsonRpcProvider()
-      const tokenContract = await new ethers.Contract(nftAdress, NFT.abi, provider)
-      const marketContract = await new ethers.Contract(nftMarketAddress, Market.abi, provider)
+       provider = await new ethers.providers.JsonRpcProvider()
+       tokenContract = await new ethers.Contract(nftAdress, NFT.abi, provider)
+       marketContract = await new ethers.Contract(nftMarketAddress, Market.abi, provider)
 
       // Return array of unsold market items
       const data = await marketContract.fetchMarketItems()
-      // console.log(78, data)
+      console.log(78, data)
+      console.log(79, await marketContract.fetchItemsCreated())
       const items = await Promise.all(data.map(async (i) => {
         const tokenUri = await tokenContract.tokenURI(i.tokenId)
-        console.log(81, tokenUri)
+        // console.log(81, tokenUri)
         const meta = await axios.get(tokenUri)
-        console.log(82, meta.data.image)
+        // console.log(82, meta.data.image)
         const price = ethers.utils.formatUnits(i.price.toString(), 'ether')
         const item = {
           price,
@@ -96,51 +100,57 @@ export default {
       this.nfts = items
     },
     async buyNFT (nft) {
+      console.log(99,  nft.tokenId, nft.price.toString(), typeof nft.price)
       const web3modal = new Web3Modal()
       const connection = await web3modal.connect()
       const provider = new ethers.providers.Web3Provider(connection)
       // sign the transaction
       const signer = provider.getSigner()
-      const contract = ethers.Contract(nftMarketAddress, Market.abi, signer)
+      const contract = new ethers.Contract(nftMarketAddress, Market.abi, signer)
       // set price
-      const price = ethers.utils.formatUnits(nft.price.toString(), 'ether')
+      const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')
+      // const price = ethers.utils.formatUnits(nft.price.toString(), 'ether')
       const transaction = await contract.createMarketSale(nftAdress, nft.tokenId, {
         value: price
       })
       await transaction.wait()
       this.loadNFTs()
     },
-    // async connectWallet () {
-    //   // loadNFTs()
-    //   try {
-    //     if (typeof window !== 'undefined') {
-    //       console.log('You are on the browser')
-    //       // ✅ Can use window here
-    //     } else {
-    //       console.log('You are on the server')
-    //       // ⛔️ Don't use window here
-    //     }
+    async connectWallet () {
+      // loadNFTs()
+      try {
+        if (typeof window !== 'undefined') {
+          console.log('You are on the browser')
+          // ✅ Can use window here
+        } else {
+          console.log('You are on the server')
+          // ⛔️ Don't use window here
+        }
 
-    //     const { ethereum } = window
+        const { ethereum } = window
 
-    //     if (!ethereum) {
-    //       alert('Get MetaMask!')
-    //       return
-    //     }
+        if (!ethereum) {
+          alert('Get MetaMask!')
+          return
+        }
 
-    //     const accounts = await ethereum.request({
-    //       method: 'eth_requestAccounts'
-    //     })
+        const accounts = await ethereum.request({
+          method: 'eth_requestAccounts'
+        })
 
-    //     // eslint-disable-next-line no-console
-    //     console.log('Connected', accounts[0])
-    //     document.getElementById('connect').innerHTML = accounts[0]
-    //     this.currentAccount = accounts[0]
-    //   } catch (error) {
-    //     // eslint-disable-next-line no-console
-    //     console.log(error)
-    //   }
-    // }
+        // eslint-disable-next-line no-console
+        console.log('Connected', accounts[0])
+        document.getElementById('connect').innerHTML = accounts[0]
+        this.currentAccount = accounts[0]
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
+    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>

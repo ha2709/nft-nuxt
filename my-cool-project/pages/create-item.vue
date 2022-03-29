@@ -130,7 +130,7 @@ export default {
       let _price = ethers.utils.parseUnits(this.price.toString(), 'ether')
       // eslint-disable-next-line no-const-assign
       const contractMarket = new ethers.Contract(nftMarketAddress, Market.abi, signer);
-        console.log(135, _price)
+        // console.log(135, _price)
     //   get listing price
       let listingPrice = await contractMarket.getListingPrice()
       listingPrice = listingPrice.toString()
@@ -139,7 +139,7 @@ export default {
         nftAdress, tokenId, _price, { value: listingPrice }
       )
       await transaction.wait()
-      console.log(144, transaction)
+      // console.log(144, transaction)
       // router.push('/')
       this.$router.push('/')
     }
